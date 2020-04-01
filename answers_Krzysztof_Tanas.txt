@@ -1,0 +1,278 @@
+Solutions to tasks given by Netguru:
+
+
+TASK 1. I would suggest improvemet of the software production process in several areas, as follows:
+
+1a. Improvement of the software production and testing process, as well as solving the customer's UX and performance problems:
+
+  Divide the testing environments (servers on which the produced software can be executed) into few categories, which should include:
+
+- developers' environments, where programmers do their work, and everyone can turn on/off various functionalities of the produced project (for various reasons)
+- 'release candidate' environments, where, after some work improving the software has been done, and a new version is ready to release, and tests performed
+  (after changes done to the software) on developers' environments were successful - all bugs found there were resolved and re-tests have proven that they
+  have been fixed) - the new version of the software is installed.
+  The 'release candidate' environments, unlike developers' ones, should be restricted, so that only administrators can turn on/off various components and/or
+  functionalities of the project, and other users have at most read-only access, except for some (project-dependent) things, such as loading sets of input data
+  into directories used for testing. Code development should be forbidden on 'release candidate' environments - they contain software version which is being prepared
+  to release, and it should be stable.
+  Running tests of the software version prepared to release (the 'release candidate' tests) is the subsequent step of the testing procedure.
+  If somebody needs to enable/disable some functionality (for example, a sub-component which has not been finished yet, and will cause some disturbance in tests of
+  other component, which is being prepared to release), a specific request to an administrator should be required.
+
+- The 'general availability' environments, where the produced software is accessible by people representing the customer, and a new version of the software
+  (after 'release candidate' tests were successful, and bugs found there have been corrected - and re-tests have proven this) is installed.  
+  The customer can run the program there, testing the functionalities which have been released, and executing it using input data of his desire.
+  Of course, the 'general availability' environments are expected to be even more stable than 'release candidate' ones, and so only administrators can turn on/off
+  various functionalities of the project, and modification of data on these environments should be available only to authorized persons.
+  Code development should be strictly forbidden on 'general availiability' environments (if a code-related bug is found while executing the program there, then
+  a bug is reported and the problem will be resolved in the next version of the software, which would then undergo the whole development process starting from
+  developers' environments.
+  This technique can cope with customer's UX issues, so that people representing the customer's company will be able to run the newly released version for their
+  desired input data sets, and will know if the product's current version meets the customer's requirements
+
+- External environments at the customer's site - where the customer can run the software in its own headquarters, but authorized persons from our company should be
+  allowed to access it and run its various functionalities. This way our company can cope with customer-side problems and some types of technical problems such as
+  portability issues, because sometimes the software could not work there despite working perfectly on our company's environments - for different possible reasons,
+  such as: 
+  - the customer could use different hardware and the software produced by our company is not compatible with it
+  - our software needs to access some external website, which is accessible from our company's servers (for example, via company's intranet), but it is inaccessible
+    from customer's servers. In this case it is required to install the required data and/or subprograms on the customer's server (giving permission to access
+    company's internal network to the customer would be, at least in general case, unacceptable due to security reasons).
+
+  When customer reports UX problems while running the software in his (external) environment, a bug showing the situation with screenshots, and a recorded video
+  (if it is necessary) of the program execution done by the customer, and a description of the encountered problem. (I assume that bugs are reported in JIRA, or
+  possibly another tool used for tracking issues related to the project).
+
+1b. Resolution of performance-related problems
+
+  As for the performance problems, I would introduce measurement of time and memory usage for each phase of the execution of the program. Now, when the customer
+  reports that a specific part of the software (e.g. loading the login window, processing data from the samples - which could be split into several sub-phases
+  - with separate time and memory usage measures, depending on the particular issue) takes too much time, does not work smoothly (i.e. makes image on the screen
+  jump unnaturally due to server overload), it is possible to discover some types of performance problems, such as code optimization.
+  In this case, a meeting with developers and analysts (who know how the given functionality is expected to work and what it exactly does) is advised, and
+  possibly a more efficient algorithm could be used to improve code quality.
+  Analysis of logs generated during the program run can be helpful there too.
+  If the problem reported by customer is stress-related (i.e. occurs when a large enough number of operations, users, etc. are working at the same time),
+  a tool used for load testing (for example - JMeter) could be used to discover source of the problem.
+
+1c. Solution of the problems related to the bugs occurred in the unsuccessful software delivered by predecessor 
+
+  Note the functionalities which are of critical importance to this type of application (a consultation and/or meeting with analysts, as well as IT architects
+  and product owners will be helpful there) and areas of the project where most and/or most serious bugs were reported. 
+  These areas need to be more focused on, and tested more precisely, designing more test (sub)cases covering situations which might cause problems.
+  An automatization of the most critical, and the most problematic functionalities of the software is suggested too.
+  The automated tests should be run in a regular manner (for example, every day in the very morning, before any work was done there on this day) noting if the
+  given procedure works correctly, and if not, what caused the problem.
+
+
+TASK 2.
+
+  I will prepare test scenarios for the registration and login form on the http://automationpractice.com/index.php web page
+  (accessible after pressing "Sign in" button).
+
+  Test of registration of a new user in this case should consist of the following test (sub) cases:
+  -------------------------------------------------------------------------------------------------
+
+  TC.1. (Test Case 1): Positive case - register a new user with valid data
+    
+    To do this, enter a valid e-mail address in the form which appears after clicking the "Sign in" button (example: aa444@testmail.com)
+    NOTE 1: This is a public web address, where people from all over the world can access and perform their tests, so it is possible that user with the specified
+    e-mail address is already registered, and we do not have rights to delete users on this page. So it is possible that some different e-mail is entered.
+    NOTE 2: On this web page, the created user is identified only by e-mail, there is no user name.
+
+    TC.1a. First positive case, let us fill all possible fields, to test them.
+
+      In this particular form many fields and buttons are present, let us fill it with some example valid data:
+
+      Data entered in "YOUR PERSONAL INFORMATION" paragraph:
+      ------------------------------------------------------
+      - Title = 'Mr.'
+      - First name = 'John Peter'
+      - Last name = 'Smith'
+      - Email = same as email entered in previous form, in this example it is 'aa444@testmail.com'
+      - Password = 'aBc88' (according to constraints in this form, the password needs to be at least 5 characters long)
+      - Date of Birth = 1 January 1900
+      - 'Sign up for our newsletter!' button checked
+      - 'Receive special offers from our partners' button checked
+
+      Data entered in "YOUR ADDRESS" paragraph:
+      -----------------------------------------
+      - First name = 'John Peter'
+      - Last name = 'Smith'
+      - Company = 'J&S Technologies Inc.'
+      - Address = '32 Blue Street'
+      - Address (Line 2) = '3rd floor'
+      - City = 'Chicago'
+      - State = 'Illinois'
+      - Zip/Postal Code = '12345'
+      - Additional information = 'I am a new user.'
+      - Home phone = '234567890'
+      - Mobile phone = '123456789'
+      - Assign an address alias for future reference = 'My address'
+
+      Finally, click on the 'Register' button.
+
+      Expected result: a new user has been successfully registered, and is automatically logged. A "View my customer account" button signed "John Peter Smith" is visible.
+
+    TC.1b. Second positive case: register a new user and leave non-compulsory data fields empty. Fill others with some different data values.
+    (I will omit the example data values here - for purpose of recruitment, only an idea is necessary here)
+
+    TC.2a. Negative case: try to register an user with email which already exists (try to enter email of previously created user and after logging out, try to create
+    user with the same email
+
+    TC.2b. Negative case: try to register an user with incorrect email - for example: aa55@testmail@com (that is not a valid email address as it contains two '@' characters)
+
+    TC.3.  Negative case: try to register an user with empty first name (provided all other fields have correct data, and that should be true for all following cases too)
+
+    TC.4.  Negative case: try to register an user with empty last name
+
+    TC.5a. Negative case: try to register an user with an empty password
+    TC.5b. Negative case: try to register an user with non-empty, but too short password (less than 5 characters)
+
+    TC.6.  Negative case: try to register an user with empty address
+
+    TC.7.  Negative case: try to register an user with empty city
+
+    TC.8.  Negative case: try to register an user with empty state
+
+    TC.8a. Negative case: try to register an user with empty zip/postal code
+    TC.8b. Negative case: try to register an user with non-empty, but incorrect postal code, e.g. '12-345' (correct format is '12345')
+
+    TC.9.  Negative case: try to register an user with empty country
+
+    TC.10. Negative case: try to register an user with neither a home or mobile phone number
+
+    TC.11. Negative case: try to register an user with empty 'Assign an address alias for future reference.' field
+
+    In all the negative cases, a specific error message is expected to appear.
+    NOTE: Depending on the guidelines concerning the project which is tested, the importance of the particular functionality, and time until deadline (for example, by when
+          the software needs to be delivered to the customer) it may be not necessary to implement so many negative cases. However, the above list is constructed in
+          case when we need, and have enough time to carefully check validity of all the data fields.
+
+
+    The login procedure test (for an already registered user) should contain the following test cases:
+    --------------------------------------------------------------------------------------------------
+
+    TC.1. (Test Case 1) Positive case - when a previously registered used logins successfully
+
+      Enter the email address of the previously created user and correct password (for the above example it is 'aa444@testmail.com', 'aBc88') and click 'Sign in'.
+
+      Expected result: User is successfully logged in. The button titled "View my customer account" (the button's title can be obtained by using the "Inspect element" option)
+      is visible in the upper right side of the screen, containing name of the logged user (in this case it is 'John Peter Smith').
+
+      The "My account" element is also visible, as well as buttons corresponding to various operations (e.g. "Order history and details" are also present).
+
+
+    Negative cases: for all of them, login procedure is expected to fail due to incorrect user email and/or password
+
+    TC.2. Empty email and password
+    TC.3. Technically incorrect email (e.g. aa444.testmail.com (instead of aa444@testmail.com)), correct password
+    TC.4. Technically correct email, but not exactly the one which was registered for our user (e.g. aa444@testmail.comm), correct password
+    TC.5. Correct email, but empty password
+    TC.6. Correct email, but incorrect password (try passwords similar to the correct one, but differing in some matter: 'abc88', 'ABC88', 'aBC88', 'aBc88 ', 'aBc888', ' aBc88', 'aBc87', 'aBc88*').
+
+   
+  For purpose of solving this task as a part of the recruitment process, I will write and deliver automated tests (in Selenium WebDriver) for the following two test cases:
+
+  1. The positive case, when a new user is registered, and valid data is entered in all fields,
+  2. The negative case, when user with the entered email identifier already exists.
+
+
+TASK 3.
+
+  A bug will be reported as a ticket in JIRA, or other tool used for issue tracking, and further behavior as a tester will depend on such matters as:
+  
+  - type of the bug
+  - severity of the bug, and of the application itself (it can be a whole different story when the tested software is a safety-critical system used in
+    flight instrument of an aircraft, and when it is an application which sends Christmas wishes)
+  - time to act before the planned release (if the issue is a minor problem and its consequences are not very serious, and there is very little time to fix it,
+    it could be acceptable to ignore it for now (although a bug still needs to be reported) and fix the problem later, in some patch, or in release of next,
+    updated version of the software.
+
+  Some examples of reported bugs and how to deal with them:
+
+  1. According to a requirement (written either in the software documentation, or as a ticket in JIRA (or other software used for tracking)), the PROCESSING_TIME
+     parameter for some test case should be set to 5, but instead it is set to "5 [". In the file with input data it is shown as "5 [SECONDS]".
+
+   In this case, an error in program code is very likely. Save a screenshot with result (for example, by pressing "Print Screen" and saving image in Paint),
+   gather logs from the program's execution, and assign a bug to a developer responsible for coding this particular functionality (or, if you don't know who it is,
+   assign a bug to the team leader of developers' team).
+
+  2. After performing some steps, possibly entering some data, clicking some certain buttons etc. the application hangs up, not reaching the next expected step.
+
+   In this case, look at the logs from the program execution, noting what happened at particular time (events listed in the logs usually have information about
+   date and hour of a given event). If the project involves multiple environments (servers used for testing) where the same software version is installed,
+   it is a good practice to run the test for the same performed steps and entered data on multiple environments. If the problem does not appear on other environments
+   (servers), it may be an environment-related problem (for example, the application needs to write some data to a database, but database quota on this particular
+   environment (server) is already exceeded, or application tries to connect with some subsystem which does not work on this particular environment (server) for
+   some reason (for example, it has been manually turned off, or somebody's earlier work caused some disturbance).
+   In this case, a bug assigned to this environment (testing server)'s administrator should be raised, with description of the problem and attached logs.
+   Looking inside the logs should help to determine cause of the problem.
+   If, instead, the problem exists on all testing environments, where this version of the software is installed (and on these, where an earlier version is installed,
+   it does not), it could be a development-related problem. Look inside log to see events which happened at the time of program execution.
+   It is possible that, for example, program has run into an infinite loop due to a mistake in program code. In this case a bug to the developers' team should be raised.
+
+  3. The application stops working due to a runtime error, and a "NullPointerException" message appears.
+  
+   This is likely a development-related bug. Logs from the program execution should be gathered and a bug to the developers should be raised.
+
+  4. A different result than expected appears after performing some computation, for example, when testing a functionality involving some matematical operations,
+     for specified test case, the output value of some variable is "60" instead of expected "48".
+
+   Now it is a good practice to try the test for different input data values, and note the expected (according to the documentation), and actual, results.
+   If a white-box testing technique is used in our team, and we have access to the program code, we can look at the actual code implementation, and check if
+   it matches its description in documentation and/or in requirements written by analysts/customer (it depends on the particular issue).
+   
+   If it is possible, we can also try to implement our unit test which verifies the given functionality (to run the tested function itself) and see what output values
+   it produces. If result is different, then some external factor caused a disturbance, and the error cause is elsewhere (it could be in some function used
+   earlier in the program code) - in this case logs should be gathered and a bug to the developers should be raised, so they can analyse logs generated by
+   the program execution and look at other parts of the code too. If it turns out that the code is correct, they would inform us about that, and the bug can be redirected
+   elsewhere (in this case, there may be an error in documentation, or some testing environment-related problem - in this case the same functionality can be tested
+   after reset of the given environment (server) or some specific component of the project, and see if the generated output results are different or the same.
+   
+   If the output result generated by our unit test is the same as the one produced when testing the main program, then there is no external factor, and probably
+   there is an error in either code implementation, or documentation/requirement. Consult developers, and if it turns out that the code implementation is correct,
+   report a bug to the author of documentation/requirement.
+
+   If, however, we are using black-box testing technique in our company/project/testing team (so that we don't see the software's code), then, after testing the
+   given functionality and noting the output results obtained for various input values, describe how the tested functionality actually behaves, and report a bug
+   to the developers, so they can check if the program code contains errors. If developers (and possibly their team leader) state that the code works well, they
+   would refer us elsewhere, and the bug can be redirected - either to the author of the documentation, or, if it is suspected that the source of the problem is
+   in even another location - to a person responsible for this area.
+
+  5. The application, or some specific part of it, works much slower than expected
+
+   Now, if the project involves using multiple testing environments (servers) where the same software version is installed and can be run, it is a good idea to
+   check if the same speed problems exist there too, and also it is helpful to know if the same problem was encountered for earlier versions of the software.
+   If the software runs too slowly on just one testing environment (server), it is likely that the problem is environment-related (for example, CPU overload or
+   overload of something else related to active work, or malfunction of some specific component of the project on this testing environment (server).
+   Look at the logs to see in what part of the test the program runs unexpectedly slowly, gather logs and consult people responsible for this particular component
+   (this does not necessarily need to be a bug - maybe the slow speed is caused by somebody's active work and related problems - like CPU overload, database overload etc.)
+   The administrator of this given testing environment (server) can be consulted in this case. If the test needs to be done urgently (due to upcoming release)
+   and it needs to be run on this specific testing environment (server), a request to the administrator to reset the environment (server) or some particular
+   subsystem, can be sent.
+   If, hovewer, this issue can be tested on some other environment (server) where there is no speed problem, it can be successfully run there, and at most
+   environment (server) - related bug can be reported to an administrator to see if there are some problems on this server (but in this case, the bug will receive
+   lower priority).
+
+   However, if the issue is not dependent on the testing environment (server) on which the software is being executed (so it happens everywhere), the problem's
+   source is probably elsewhere. Gather the logs from program execution and note which parts of the execution took how long. Consult the team responsible for
+   this particular functionality (its team leader should redirect to the right person, and possibly consult the issue with developers, analysts, or possibly other
+   people too), and then it would be decided if it is a bug and who should be assigned to it, as well as information on how important it is for the customer
+   (assuming that the problem was spotted just before planned release of the product, as stated in the task' s description in e-mail).
+
+  6. Program does not work properly for some specific input data (for example - when defining a sequence of telecommunications-related objects
+    (devices, cards, ports, trails)) the sequence is not created properly
+
+   In this case an analyst responsible for this area should be consulted first, because the problem does not need to be a bug here - it could turn out, that,
+   for example, models of ports which we want to create in the device sequence are incompatible with the given card/device model, and if so, it is not a bug and
+   input data should be corrected. Also this is advisable to (if the given project permits this) to test the same input data on another testing environment (server)
+   and compare if device sequence was created properly there.
+   
+   If, however, the analyst states that the entered input data (in this example - devices, cards, ports, trails and other objects) are correct, and the output result
+   is still incorrect (for example, some of the devices have not been created), then the logs from software execution should be gathered.
+   Analysis of logs, along with experience from previously run tests, could be helpful to determine cause of the problem - i.e. if the likely cause was a malfunction
+   of certain subsystem on the given testing environment (server), or an error in code development, or possibly some other issue (to decide where the bug has to be
+   reported to - the testing environment's administrator, the developers' team or somebody else.
+   Note that - this is always true - if the bug was assigned to the wrong person, and it turns out that there is no problem in his/her area of responsibility, it can
+   be redirected.
